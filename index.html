@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="id"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Timeline Penilaian PIPK – Ditjen TKPR</title>
+<style>
+:root{--bg:#fff;--fg:#1f1f1e;--mut:#6b6a66;--bd:#dedcd5;--sf:#f4f3ef;--ac:#185FA5;--acb:#e6f1fb;--rd:#c0392b;--gn:#3b7d1e;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#1f1e1c;--fg:#ecebe6;--mut:#a3a199;--bd:#3d3b37;--sf:#2a2927;--ac:#85b7eb;--acb:#1b3350;--rd:#f09595;--gn:#97c459}}
+:root[data-theme="dark"]{--bg:#1f1e1c;--fg:#ecebe6;--mut:#a3a199;--bd:#3d3b37;--sf:#2a2927;--ac:#85b7eb;--acb:#1b3350;--rd:#f09595;--gn:#97c459}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--fg);font:14px/1.4 system-ui,-apple-system,"Segoe UI",Arial,sans-serif}
+#wrap{max-width:980px;margin:0 auto;padding:16px}
+h1{font-size:18px;font-weight:600;margin:0 0 2px}
+.sub{font-size:12px;color:var(--mut)}
+button,input,select{font:inherit;font-size:12px;color:var(--fg);background:var(--bg);border:1px solid var(--bd);border-radius:6px;padding:3px 9px}
+input,select{height:26px;box-sizing:border-box;padding:2px 6px}
+button{cursor:pointer}button.on{background:var(--acb);color:var(--ac);border-color:var(--ac)}button.dg{color:var(--rd);border-color:var(--rd)}button:disabled{opacity:.4}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;margin:12px 0}
+.mc{background:var(--sf);border-radius:10px;padding:10px 12px}.mc p{margin:0;font-size:12px;color:var(--mut)}.mc b{font-size:20px;font-weight:600}
+.mt{height:4px;border-radius:2px;background:var(--bd);margin-top:6px;overflow:hidden}.mt i{display:block;height:100%;background:var(--gn)}
+.bar{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin:0 0 8px}.sp{flex:1}
+.sc{overflow-x:auto}.g{display:grid;align-items:center;font-size:12px;min-width:720px}
+.m{text-align:center;font-weight:600;color:var(--mut);border-bottom:1px solid var(--bd);padding:2px 0;white-space:nowrap;overflow:hidden}
+.dn{font-size:11px;text-align:center;color:var(--mut);height:30px;display:flex;flex-direction:column;justify-content:center;line-height:1.1}
+.dn.a{color:var(--fg);font-weight:600}.dn.t{box-shadow:inset 0 -2px 0 #e24b4a}
+.l{padding:3px 8px 3px 4px;cursor:pointer;line-height:1.25}.l small{display:block;font-size:11px;color:var(--mut)}.l.s{font-weight:600}
+.ph{font-weight:600;padding-top:12px;cursor:default;display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+.c{align-self:stretch;min-height:32px;border:1px solid var(--bd);margin:-.5px;box-sizing:border-box;cursor:pointer;color:#fff;display:flex;align-items:center;justify-content:center}
+.c.t{box-shadow:inset 2px 0 0 #e24b4a}.c:hover{outline:2px solid var(--fg);outline-offset:-2px}.d{opacity:.3}
+.dot{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:4px}
+#pn{margin-top:12px;background:var(--sf);border:1px solid var(--bd);border-radius:10px;padding:12px 14px}
+.kv{display:grid;grid-template-columns:90px 1fr;gap:6px 10px;margin:8px 0;align-items:center}.kv>span:nth-child(odd){color:var(--mut)}
+.row{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+#st{font-size:12px;color:var(--mut)}
+</style></head><body><div id="wrap">
+<h1>Timeline Penilaian PIPK – Ditjen TKPR</h1>
+<div class="sub">Perubahan tersimpan otomatis di peramban; aktifkan sinkronisasi GitHub agar sama di semua perangkat. <span id="st"></span></div>
+<div class="bar" style="margin-top:8px"><button id="bgh">Sinkronisasi GitHub</button><button id="bex">Ekspor cadangan</button><button id="bim">Impor cadangan</button><input type="file" id="fim" accept=".json,application/json" hidden></div>
+<div id="gh" class="mc" hidden style="margin:0 0 10px"><b>Sinkronisasi GitHub</b>
+<p class="sub">Jadwal disimpan sebagai file JSON di repository Anda sehingga sama di semua perangkat. Buat <i>fine-grained personal access token</i> (GitHub &rarr; Settings &rarr; Developer settings) khusus repository ini dengan izin <i>Contents: Read and write</i>. Token hanya disimpan di peramban ini dan dimasukkan sekali per perangkat.</p>
+<div class="row"><input id="ghr" placeholder="pemilik/nama-repo" style="width:200px"><input id="ghp" placeholder="pipk-data.json" style="width:150px"><input id="ght" type="password" placeholder="Token" style="width:220px"></div>
+<div class="row" style="margin-top:6px"><button id="ghs">Simpan &amp; sinkronkan</button><button id="ghx">Putuskan</button></div></div>
+<div id="app"></div></div>
+<script>
+const K='pipk-v1',PAL=['#378ADD','#1D9E75','#7F77DD','#D85A30','#BA7517','#D4537E','#639922','#888780'],ROM='I II III IV V VI VII VIII IX X XI XII'.split(' ');
+const MN='Januari Februari Maret April Mei Juni Juli Agustus September Oktober November Desember'.split(' '),MS='Jan Feb Mar Apr Mei Jun Jul Agu Sep Okt Nov Des'.split(' '),DN='Minggu Senin Selasa Rabu Kamis Jumat Sabtu'.split(' '),DS='Min Sen Sel Rab Kam Jum Sab'.split(' ');
+const STN=['Belum mulai','Berjalan','Selesai'],STC=['#888780','#EF9F27','#639922'],TARGET='2026-11-13';
+const pad=x=>x<10?'0'+x:''+x,iso=d=>d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate()),D=s=>new Date(s+'T00:00:00');
+const esc=s=>String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;'),at=s=>esc(s).replace(/"/g,'&quot;');
+function seed(){let u=0;const A=(n,s,e,w,o)=>({id:++u,name:n,sd:s,ed:e,who:w,out:o,st:0});
+ const P=[['Persiapan penilaian',[A('Penyampaian awal terhadap BP3KP','2026-10-01','2026-10-02','Tim Penilai / Sekretariat','Penyampaian awal tersampaikan ke BP3KP'),A('Proses penyampaian awal oleh Balai/BP3KP','2026-10-05','2026-10-07','Balai/BP3KP','Penyampaian awal diproses oleh Balai/BP3KP'),A('Konfirmasi kesiapan & proses administrasi lainnya','2026-10-08','2026-10-12','Tim Penilai / Balai/BP3KP','Konfirmasi kesiapan, daftar peserta, tautan Zoom, kelengkapan administrasi')]],
+ ['Sosialisasi & penilaian hybrid',[A('Sosialisasi & pembahasan','2026-10-13','2026-10-13','Tim Penilai, Satker/Balai','Risalah pembahasan'),A('Pengecekan Tabel A','2026-10-13','2026-10-14','Tim Penilai','Catatan pengecekan Tabel A'),A('Wawancara Tabel B','2026-10-14','2026-10-15','Tim Penilai, Satker/Balai','Catatan wawancara Tabel B'),A('Cek dokumen pendukung','2026-10-14','2026-10-15','Tim Penilai','Daftar kelengkapan dokumen')]],
+ ['Penilaian tim penilai',[A('Pengisian kertas kerja (2 minggu)','2026-10-16','2026-10-29','Tim Penilai','Kertas kerja terisi')]],
+ ['Konsolidasi hasil',[A('Konsolidasi seluruh tim','2026-10-30','2026-11-02','Seluruh Tim Penilai','Hasil terkonsolidasi'),A('Draft laporan hasil','2026-11-02','2026-11-04','Tim Penilai','Draft laporan')]],
+ ['Laporan',[A('Penyusunan laporan','2026-11-04','2026-11-06','Tim Penilai','Laporan versi reviu'),A('Finalisasi laporan','2026-11-09','2026-11-11','Tim Penilai / Pimpinan','Laporan final'),A('Penyampaian laporan','2026-11-12','2026-11-13','Sekretariat / Tim Penilai','Laporan tersampaikan')]]];
+ return{n:u+10,ts:0,ph:P.map((p,i)=>({id:100+i,t:p[0],c:PAL[i],acts:p[1]}))}}
+let S;try{S=JSON.parse(localStorage.getItem(K))}catch(e){}if(!S||!S.ph)S=seed();
+let focus=null,pf=null,edit=false,pend=null,days=[],n=0,today=-1,dbDoc=null,tmr,rt;
+const nid=()=>++S.n,stat=t=>document.getElementById('st').textContent=t;
+const GK='pipk-gh';let GH=null,ghSha=null,ghT;try{GH=JSON.parse(localStorage.getItem(GK))}catch(e){}
+const b64e=x=>btoa(unescape(encodeURIComponent(x))),b64d=x=>decodeURIComponent(escape(atob(x.replace(/\s/g,''))));
+const ghU=()=>'https://api.github.com/repos/'+GH.repo+'/contents/'+GH.path,ghH=()=>({Authorization:'Bearer '+GH.token,Accept:'application/vnd.github+json','X-GitHub-Api-Version':'2022-11-28'});
+async function ghPull(){const r=await fetch(ghU()+'?t='+Date.now(),{headers:ghH(),cache:'no-store'});if(r.status==404){ghSha=null;return null}if(!r.ok)throw new Error('GitHub '+r.status);const j=await r.json();ghSha=j.sha;return JSON.parse(b64d(j.content))}
+async function ghPush(){const body=()=>JSON.stringify({message:'Perbarui timeline PIPK',content:b64e(JSON.stringify(S)),...(ghSha?{sha:ghSha}:{})});
+ let r=await fetch(ghU(),{method:'PUT',headers:ghH(),body:body()});
+ if(r.status==409||r.status==422){await ghPull();r=await fetch(ghU(),{method:'PUT',headers:ghH(),body:body()})}
+ if(!r.ok)throw new Error('GitHub '+r.status);ghSha=(await r.json()).content.sha}
+async function ghSync(){if(!GH)return;try{stat('Sinkronisasi GitHub…');const r=await ghPull();
+ if(r&&r.ph&&(r.ts||0)>(S.ts||0)){S=r;try{localStorage.setItem(K,JSON.stringify(S))}catch(e){}render();stat('Dimuat dari GitHub.')}
+ else if(!r||(S.ts||0)>(r.ts||0)){await ghPush();stat('Tersimpan ke GitHub.')}else stat('Sudah sinkron dengan GitHub.')}
+ catch(e){stat('Gagal sinkron GitHub ('+e.message+'). Perubahan tetap tersimpan di peramban ini.')}}
+async function pubLoad(){try{const r=await fetch('pipk-data.json?t='+Date.now(),{cache:'no-store'});if(!r.ok)return;const j=await r.json();
+ if(j&&j.ph&&(j.ts||0)>(S.ts||0)){S=j;try{localStorage.setItem(K,JSON.stringify(S))}catch(e){}render();stat('Dimuat dari file bersama (hanya baca; isi token untuk menyimpan perubahan).')}}catch(e){}}
+function save(){S.ts=Date.now();try{localStorage.setItem(K,JSON.stringify(S))}catch(e){}stat('Menyimpan…');clearTimeout(tmr);
+ tmr=setTimeout(async()=>{try{if(dbDoc){await dbDoc.set({json:JSON.stringify(S)});if(!GH)stat('Tersimpan di akun Anda.')}else if(!GH)stat('Tersimpan di peramban ini.')}catch(e){if(!GH)stat('Tersimpan di peramban ini.')}
+  if(GH){clearTimeout(ghT);ghT=setTimeout(async()=>{try{await ghPush();stat('Tersimpan ke GitHub.')}catch(e){stat('Gagal simpan ke GitHub ('+e.message+'). Tersimpan di peramban ini.')}},2000)}},500)}
+(async()=>{try{if(!window.claude)return;const[db,us]=await Promise.all([claude.use('db'),claude.use('user')]);if(!db||!us)return;const id=await us.id();if(!id)return;
+ dbDoc=db.doc('data/users/'+id+'/pipk');const s=await dbDoc.get();
+ if(s.exists){const r=JSON.parse(s.data().json);if(r&&r.ph&&(r.ts||0)>(S.ts||0)){S=r;try{localStorage.setItem(K,JSON.stringify(S))}catch(e){}render()}}
+ stat('Tersimpan di akun Anda.')}catch(e){}})();
+const allA=()=>S.ph.flatMap(p=>p.acts),fA=id=>{for(const p of S.ph){const a=p.acts.find(x=>x.id===id);if(a)return{a,p}}return null};
+const rng=a=>{const x=D(a.sd),y=D(a.ed);return a.sd===a.ed?x.getDate()+' '+MS[x.getMonth()]:x.getMonth()===y.getMonth()?x.getDate()+'–'+y.getDate()+' '+MS[y.getMonth()]:x.getDate()+' '+MS[x.getMonth()]+'–'+y.getDate()+' '+MS[y.getMonth()]};
+const full=d=>DN[d.getDay()]+', '+d.getDate()+' '+MN[d.getMonth()]+' '+d.getFullYear();
+function build(){let mn=null,mx=null;allA().forEach(a=>{if(!mn||a.sd<mn)mn=a.sd;if(!mx||a.ed>mx)mx=a.ed});if(!mn){mn='2026-10-01';mx=TARGET}
+ days=[];for(let d=D(mn),e=D(mx);d<=e;d.setDate(d.getDate()+1))if(d.getDay()%6)days.push(new Date(d));n=days.length;
+ const ix=s=>Math.max(0,days.findIndex(d=>iso(d)===s));allA().forEach(a=>{a.s=ix(a.sd);a.e=ix(a.ed)});today=days.findIndex(d=>iso(d)===iso(new Date()))}
+function render(){clearTimeout(rt);build();
+ let f=focus!==null?fA(focus):null;if(!f)focus=null;if(pf!==null&&!S.ph.some(p=>p.id===pf))pf=null;
+ const vp=S.ph.filter(p=>pf===null||p.id===pf),vis=vp.flatMap(p=>p.acts);if(f&&!vis.includes(f.a)){focus=null;f=null}
+ let ws=0,we=n-1;if(f){ws=Math.max(0,f.a.s-2);we=Math.min(n-1,f.a.e+2);while(we-ws<5&&n>6){if(ws>0)ws--;if(we<n-1)we++}}
+ const nc=we-ws+1,zoom=nc<=16,dense=nc>34,LW=edit?280:190,hi={};(f?[f]:vis.map(a=>fA(a.id))).forEach(r=>{hi[r.a.s]=r.p.c;hi[r.a.e]=r.p.c});
+ let tot=0,sel=0,run=0;allA().forEach(a=>{tot++;a.st==2&&sel++;a.st==1&&run++});const pct=tot?Math.round(sel/tot*100):0;
+ let endT='–',endS='',endC='var(--mut)';if(n){const e=days[n-1];endT=e.getDate()+' '+MS[e.getMonth()];if(iso(e)<=TARGET){endS='sesuai target 13 Nov 2026';endC='var(--gn)'}else{endS='melewati target 13 Nov ('+days.filter(d=>iso(d)>TARGET).length+' hari kerja)';endC='var(--rd)'}}
+ let h='<div class="cards"><div class="mc"><p>Kegiatan</p><b>'+tot+'</b> <span class="sub">dalam '+S.ph.length+' tahap</span></div><div class="mc"><p>Progres</p><b>'+pct+'%</b> <span class="sub">'+sel+' dari '+tot+' selesai, '+run+' berjalan</span><div class="mt"><i style="width:'+pct+'%"></i></div></div><div class="mc"><p>Akhir rangkaian</p><b>'+endT+'</b> <span class="sub" style="color:'+endC+'">'+endS+'</span></div></div>';
+ h+='<div class="bar"><button data-a="pf" data-v="" class="'+(pf===null?'on':'')+'">Semua tahap</button>'+S.ph.map((p,k)=>'<button data-a="pf" data-v="'+p.id+'" class="'+(pf===p.id?'on':'')+'">'+ROM[k]+'. '+esc(p.t)+'</button>').join('')+'<span class="sp"></span><button data-a="edit" class="'+(edit?'on':'')+'">'+(edit?'Selesai edit':'Edit jadwal')+'</button></div>';
+ if(edit)h+='<div class="bar"><button data-a="addp">+ Tambah tahap</button><button data-a="reset" class="'+(pend=='reset'?'dg':'')+'">'+(pend=='reset'?'Yakin kembalikan jadwal awal?':'Kembalikan jadwal awal')+'</button><span class="sub" id="nt">Ubah nama atau tanggal langsung pada daftar; akhir pekan disesuaikan ke hari kerja.</span></div>';
+ h+='<div class="sc"><div class="g" style="grid-template-columns:'+LW+'px repeat('+nc+',minmax(0,1fr))"><div></div>';
+ for(let i=ws;i<=we;){const k=days[i].getFullYear()*12+days[i].getMonth();let j=i;while(j+1<=we&&days[j+1].getFullYear()*12+days[j+1].getMonth()===k)j++;
+  h+='<div class="m" style="grid-column:'+(i-ws+2)+'/'+(j-ws+3)+'">'+(j-i>=6?MN[days[i].getMonth()]+' '+days[i].getFullYear():MS[days[i].getMonth()])+'</div>';i=j+1}
+ h+='<div class="sub">Kegiatan & tanggal</div>';
+ for(let k=ws;k<=we;k++)h+='<div class="dn'+(hi[k]?' a':'')+(k===today?' t':'')+'" style="'+(hi[k]?'background:'+hi[k]+'33;border-radius:4px':'')+'">'+(zoom?'<small>'+DS[days[k].getDay()]+'</small>':'')+'<span>'+(!dense||days[k].getDay()===1?days[k].getDate():'')+'</span></div>';
+ vp.forEach(p=>{const pi=S.ph.indexOf(p);
+  h+='<div class="ph" style="grid-column:1/-1"><span class="dot" style="background:'+p.c+'"></span>'+ROM[pi]+'. '+(edit?'<input data-f="pt" data-p="'+p.id+'" value="'+at(p.t)+'" style="width:240px"><button data-a="adda" data-v="'+p.id+'">+ Kegiatan</button><button data-a="delp" data-v="'+p.id+'" class="'+(pend=='p'+p.id?'dg':'')+'">'+(pend=='p'+p.id?'Yakin hapus tahap?':'Hapus tahap')+'</button>':esc(p.t)+(p.acts.length?'':' <span class="sub">(belum ada kegiatan)</span>'))+'</div>';
+  p.acts.forEach(a=>{const dm=focus!==null&&focus!==a.id;
+   h+='<div class="l'+(focus===a.id?' s':'')+(dm?' d':'')+'" data-r="'+a.id+'">'+(edit?'<div class="row" style="flex-wrap:nowrap"><input data-f="nm" data-r="'+a.id+'" value="'+at(a.name)+'" style="flex:1;min-width:0"><button data-a="del" data-v="'+a.id+'" class="'+(pend=='a'+a.id?'dg':'')+'" aria-label="Hapus kegiatan">'+(pend=='a'+a.id?'Yakin?':'Hapus')+'</button></div><div class="row" style="flex-wrap:nowrap;margin-top:3px"><input type="date" data-f="sd" data-r="'+a.id+'" value="'+a.sd+'" style="flex:1;min-width:0"><span>–</span><input type="date" data-f="ed" data-r="'+a.id+'" value="'+a.ed+'" style="flex:1;min-width:0"></div>':esc(a.name)+'<small><span class="dot" style="background:'+STC[a.st]+'"></span>'+rng(a)+' · '+STN[a.st]+'</small>')+'</div>';
+   for(let k=ws;k<=we;k++){const inr=k>=a.s&&k<=a.e;
+    h+='<div class="c'+(k===today?' t':'')+'" data-r="'+a.id+'" title="'+full(days[k])+(inr?' – '+at(a.name):'')+'" style="'+(inr?'background:'+p.c+';opacity:'+((a.st?1:.6)*(dm?.3:1)):'')+'">'+(inr&&a.st==2&&k===a.e?'✓':'')+'</div>'}})});
+ if(vis.length&&(!f||we===n-1)){h+='<div class="ph" style="color:var(--rd)">Akhir rangkaian</div>';for(let k=ws;k<=we;k++)h+='<div class="c" title="'+full(days[k])+'" style="min-height:26px;margin-top:10px;'+(k===n-1?'background:#E24B4A':'border-color:transparent')+'"></div>'}
+ h+='</div></div>';
+ h+='<div id="pn">';
+ if(!f)h+='<span class="sub">Klik nama kegiatan atau kotaknya untuk memfokuskan timeline dan mengubah statusnya.</span>';
+ else{const a=f.a;h+='<div class="row" style="justify-content:space-between"><b>'+esc(a.name)+'</b><button data-a="close">Lihat semua</button></div><div class="kv"><span>Tahap</span><span>'+ROM[S.ph.indexOf(f.p)]+'. '+esc(f.p.t)+'</span><span>Tanggal</span><span>'+full(D(a.sd))+(a.sd!==a.ed?' – '+full(D(a.ed)):'')+'</span><span>Durasi</span><span>'+(a.e-a.s+1)+' hari kerja</span><span>Pelaksana</span>'+(edit?'<input data-f="who" value="'+at(a.who)+'">':'<span>'+esc(a.who||'–')+'</span>')+'<span>Output</span>'+(edit?'<input data-f="out" value="'+at(a.out)+'">':'<span>'+esc(a.out||'–')+'</span>')+'</div><div class="row"><span class="sub">Status</span>'+STN.map((s,k)=>'<button data-a="st" data-v="'+k+'" class="'+(a.st===k?'on':'')+'">'+s+'</button>').join('')+'</div>'}
+ document.getElementById('app').innerHTML=h+'</div>'}
+function snap(s,isEnd){const d=D(s),w=d.getDay();if(w==6||w==0){d.setDate(d.getDate()+(isEnd?(w==6?-1:-2):(w==6?2:1)));return iso(d)}return s}
+document.getElementById('app').addEventListener('click',e=>{const t=e.target,b=t.closest('[data-a]');let rr=false;
+ const act=b&&b.dataset.a,v=b&&b.dataset.v,key=act=='del'?'a'+v:act=='delp'?'p'+v:act=='reset'?'reset':null;
+ if(key){if(pend===key){if(key=='reset'){S=seed();focus=null;pf=null}else if(key[0]=='a'){const i=+v;S.ph.forEach(p=>p.acts=p.acts.filter(a=>a.id!==i));if(focus===i)focus=null}else{S.ph=S.ph.filter(p=>p.id!==+v)}pend=null;save()}else pend=key;render();return}
+ if(pend){pend=null;rr=true}
+ if(act=='pf'){pf=v?+v:null;focus=null;rr=true}else if(act=='edit'){edit=!edit;rr=true}else if(act=='close'){focus=null;rr=true}
+ else if(act=='st'){const r=fA(focus);if(r){r.a.st=+v;save();rr=true}}
+ else if(act=='addp'||act=='adda'){let p;if(act=='addp'){p={id:nid(),t:'Tahap baru',c:PAL[S.ph.length%PAL.length],acts:[]};S.ph.push(p)}else p=S.ph.find(x=>x.id===+v);
+  if(p){const d=p.acts.length?p.acts[p.acts.length-1].ed:(n?iso(days[0]):'2026-10-01');p.acts.push({id:nid(),name:'Kegiatan baru',sd:d,ed:d,who:'',out:'',st:0});save();rr=true}}
+ else if(!t.closest('input,select,button')){const c=t.closest('[data-r]');if(c){const i=+c.dataset.r;focus=focus===i?null:i;rr=true}}
+ if(rr)render()});
+document.getElementById('app').addEventListener('input',e=>{const t=e.target,f=t.dataset.f;if(!f)return;
+ if(f=='nm'){const r=fA(+t.dataset.r);if(r){r.a.name=t.value;save()}}else if(f=='pt'){const p=S.ph.find(x=>x.id===+t.dataset.p);if(p){p.t=t.value;save()}}
+ else if(f=='who'||f=='out'){const r=fA(focus);if(r){r.a[f]=t.value;save()}}});
+document.getElementById('app').addEventListener('change',e=>{const t=e.target,f=t.dataset.f;if(f!='sd'&&f!='ed')return;
+ const r=fA(+t.dataset.r),y=+(t.value||'0').slice(0,4);if(!r||y<2020||y>2035)return;
+ const v=snap(t.value,f=='ed');r.a[f]=v;if(f=='sd'&&r.a.ed<v)r.a.ed=v;if(f=='ed'&&r.a.sd>v)r.a.sd=v;save();clearTimeout(rt);rt=setTimeout(render,500)});
+const $=id=>document.getElementById(id);
+function ghUi(){$('bgh').textContent=GH?'GitHub: '+GH.repo:'Sinkronisasi GitHub';$('bgh').className=GH?'on':''}
+$('bgh').onclick=()=>{$('gh').hidden=!$('gh').hidden;if(GH){$('ghr').value=GH.repo;$('ghp').value=GH.path}};
+$('ghs').onclick=()=>{const repo=$('ghr').value.trim(),path=($('ghp').value.trim()||'pipk-data.json').replace(/^\/+/,''),token=$('ght').value.trim()||(GH&&GH.token)||'';
+ if(!/^[\w.-]+\/[\w.-]+$/.test(repo)||!token){stat('Isi repository (pemilik/nama-repo) dan token dengan benar.');return}
+ GH={repo,path,token};ghSha=null;try{localStorage.setItem(GK,JSON.stringify(GH))}catch(e){}$('ght').value='';$('gh').hidden=true;ghUi();ghSync()};
+$('ghx').onclick=()=>{GH=null;try{localStorage.removeItem(GK)}catch(e){}ghUi();$('gh').hidden=true;stat('Sinkronisasi GitHub diputus. Data tetap di peramban ini.')};
+$('bex').onclick=()=>{const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify(S,null,1)],{type:'application/json'}));a.download='pipk-cadangan-'+iso(new Date())+'.json';a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1500)};
+$('bim').onclick=()=>$('fim').click();
+$('fim').onchange=async e=>{const f=e.target.files[0];if(!f)return;try{const r=JSON.parse(await f.text());if(!r||!Array.isArray(r.ph))throw 0;S=r;if(!S.n)S.n=1000;focus=null;pf=null;save();render();stat('Cadangan berhasil diimpor.')}catch(x){stat('File cadangan tidak valid.')}e.target.value=''};
+document.addEventListener('visibilitychange',()=>{if(!document.hidden&&GH)ghSync()});
+ghUi();if(GH)ghSync();else pubLoad();
+render();
+</script></body></html>

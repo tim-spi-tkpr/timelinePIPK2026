@@ -4,8 +4,8 @@
 <title>Timeline Penilaian PIPK – Ditjen TKPR – TA.2026</title>
 <style>
 :root{--bg:#fff;--fg:#1f1f1e;--mut:#6b6a66;--bd:#dedcd5;--sf:#f4f3ef;--ac:#185FA5;--acb:#e6f1fb;--rd:#c0392b;--gn:#3b7d1e;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#1f1e1c;--fg:#ecebe6;--mut:#a3a199;--bd:#3d3b37;--sf:#2a2927;--ac:#85b7eb;--acb:#1b3350;--rd:#f09595;--gn:#97c459}}
-:root[data-theme="dark"]{--bg:#1f1e1c;--fg:#ecebe6;--mut:#a3a199;--bd:#3d3b37;--sf:#2a2927;--ac:#85b7eb;--acb:#1b3350;--rd:#f09595;--gn:#97c459}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#1f1e1c;--fg:#ecebe6;--mut:#a3a199;--bd:#3d3b37;--sf:#2a2927;--ac:#85b7eb;--acb:#1b3350;--rd:#f09595;--gn:#97c459;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#1f1e1c;--fg:#ecebe6;--mut:#a3a199;--bd:#3d3b37;--sf:#2a2927;--ac:#85b7eb;--acb:#1b3350;--rd:#f09595;--gn:#97c459;color-scheme:dark}
 html{scroll-padding-top:env(safe-area-inset-top,0px)}
 body{margin:0;background:var(--bg);color:var(--fg);font:14px/1.4 system-ui,-apple-system,"Segoe UI",Arial,sans-serif}
 #wrap{max-width:980px;margin:0 auto;padding:16px}
@@ -26,18 +26,25 @@ button{cursor:pointer}button.on{background:var(--acb);color:var(--ac);border-col
 .ph{font-weight:600;padding-top:12px;cursor:default;display:flex;gap:6px;align-items:center;flex-wrap:wrap}
 .c{align-self:stretch;min-height:32px;border:1px solid var(--bd);margin:-.5px;box-sizing:border-box;cursor:pointer;color:#fff;display:flex;align-items:center;justify-content:center}
 .c.t{box-shadow:inset 2px 0 0 #e24b4a}.c:hover{outline:2px solid var(--fg);outline-offset:-2px}.d{opacity:.3}
+.dn{cursor:pointer}.dn.fd{background:rgba(128,128,128,.35);color:var(--fg);font-weight:700;border-radius:4px}.c.fc{position:relative}.c.fc::after{content:"";position:absolute;inset:0;background:var(--fg);opacity:.16;pointer-events:none}
+.l[data-r]{position:relative}.l[data-r]::before{content:"";position:absolute;inset:0;border-radius:6px;background:var(--pc);opacity:0;pointer-events:none;transition:opacity .12s}.l[data-r]:hover::before{opacity:.07}.l[data-r].s::before{opacity:.13}
+.fade{opacity:.2!important}.ph[data-p]{cursor:pointer;border-radius:6px;padding:5px 8px;margin-top:6px;position:relative}.ph[data-p]::before{content:"";position:absolute;inset:0;border-radius:6px;background:var(--pc);opacity:0;pointer-events:none;transition:opacity .12s}.ph[data-p]:hover::before,.ph[data-p].on::before{opacity:.18}.ph[data-p]:hover,.ph[data-p].on{box-shadow:inset 3px 0 0 var(--pc)}
+:root[data-theme="light"]{color-scheme:light}
+#hd{display:flex;justify-content:space-between;align-items:flex-start;gap:8px}
 .dot{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:4px}
+#pn.act{position:sticky;bottom:calc(8px + env(safe-area-inset-bottom,0px));z-index:5;box-shadow:0 4px 18px rgba(0,0,0,.2)}
 #pn{margin-top:12px;background:var(--sf);border:1px solid var(--bd);border-radius:10px;padding:12px 14px}
 .kv{display:grid;grid-template-columns:90px 1fr;gap:6px 10px;margin:8px 0;align-items:center}.kv>span:nth-child(odd){color:var(--mut)}
 .row{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
 #st{font-size:12px;color:var(--mut)}
 </style>
+<script>try{var _t=localStorage.getItem("pipk-theme");if(_t)document.documentElement.setAttribute("data-theme",_t)}catch(e){}</script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
 </head><body><div id="wrap">
-<h1>Timeline Penilaian PIPK – Ditjen TKPR – TA.2026</h1>
-<div class="sub"><span id="st"></span></div>
+<div id="hd"><div><h1>Timeline Penilaian PIPK – Ditjen TKPR – TA.2026</h1>
+<div class="sub"><span id="st"></span></div></div><button id="tg" type="button"></button></div>
 <div id="app"></div></div>
 <script>
 const K='pipk-v1',PAL=['#378ADD','#1D9E75','#7F77DD','#D85A30','#BA7517','#D4537E','#639922','#888780'],ROM='I II III IV V VI VII VIII IX X XI XII'.split(' ');
@@ -53,7 +60,7 @@ function seed(){let u=0;const A=(n,s,e,w,o)=>({id:++u,name:n,sd:s,ed:e,who:w,out
  ['Laporan',[A('Penyusunan laporan','2026-11-04','2026-11-06','Tim Penilai','Laporan versi reviu'),A('Finalisasi laporan','2026-11-09','2026-11-11','Tim Penilai / Pimpinan','Laporan final'),A('Penyampaian laporan','2026-11-12','2026-11-13','Sekretariat / Tim Penilai','Laporan tersampaikan')]]];
  return{n:u+10,ts:0,ph:P.map((p,i)=>({id:100+i,t:p[0],c:PAL[i],acts:p[1]}))}}
 let S;try{S=JSON.parse(localStorage.getItem(K))}catch(e){}if(!S||!S.ph)S=seed();
-let focus=null,pf=null,edit=false,pend=null,days=[],n=0,today=-1,dbDoc=null,tmr,rt;
+let focus=null,pf=null,edit=false,pend=null,days=[],n=0,today=-1,dbDoc=null,tmr,rt,fdate=null,fdi=-1;
 const nid=()=>++S.n,stat=t=>document.getElementById('st').textContent=t;
 /* ===== KONFIGURASI FIREBASE: ganti 4 nilai "ISI_..." sesuai panduan ===== */
 const FB={apiKey:"AIzaSyCwu0l_sWDh1ji4INmjF9EL8LVQGI7R_Uw",authDomain:"timeline-pipk.firebaseapp.com",projectId:"timeline-pipk",appId:"1:665704263432:web:c13f0b73318bf1f13ac6bd"};
@@ -75,11 +82,13 @@ const full=d=>DN[d.getDay()]+', '+d.getDate()+' '+MN[d.getMonth()]+' '+d.getFull
 function build(){let mn=null,mx=null;allA().forEach(a=>{if(!mn||a.sd<mn)mn=a.sd;if(!mx||a.ed>mx)mx=a.ed});if(!mn){mn='2026-10-01';mx=TARGET}
  days=[];for(let d=D(mn),e=D(mx);d<=e;d.setDate(d.getDate()+1))if(d.getDay()%6)days.push(new Date(d));n=days.length;
  const ix=s=>Math.max(0,days.findIndex(d=>iso(d)===s));allA().forEach(a=>{a.s=ix(a.sd);a.e=ix(a.ed)});today=days.findIndex(d=>iso(d)===iso(new Date()))}
-function render(){clearTimeout(rt);if(!canEdit())edit=false;build();
+function render(){clearTimeout(rt);if(!canEdit())edit=false;build();fdi=fdate?days.findIndex(d=>iso(d)===fdate):-1;if(fdi<0)fdate=null;
  let f=focus!==null?fA(focus):null;if(!f)focus=null;if(pf!==null&&!S.ph.some(p=>p.id===pf))pf=null;
  const vp=S.ph.filter(p=>pf===null||p.id===pf),vis=vp.flatMap(p=>p.acts);if(f&&!vis.includes(f.a)){focus=null;f=null}
- let ws=0,we=n-1;if(f){ws=Math.max(0,f.a.s-2);we=Math.min(n-1,f.a.e+2);while(we-ws<5&&n>6){if(ws>0)ws--;if(we<n-1)we++}}
- const nc=we-ws+1,zoom=nc<=16,dense=nc>34,LW=edit?280:190,hi={};(f?[f]:vis.map(a=>fA(a.id))).forEach(r=>{hi[r.a.s]=r.p.c;hi[r.a.e]=r.p.c});
+ if(hpin!==null&&!vp.some(p=>p.id===hpin))hpin=null;
+ let ws=0,we=n-1;if(f){ws=Math.max(0,f.a.s-2);we=Math.min(n-1,f.a.e+2);while(we-ws<5&&n>6){if(ws>0)ws--;if(we<n-1)we++}}else if(fdi>=0){ws=Math.max(0,fdi-3);we=Math.min(n-1,fdi+3);while(we-ws<6&&n>7){if(ws>0)ws--;if(we<n-1)we++}}
+ const nc=we-ws+1,zoom=nc<=16,dense=nc>34,LW=edit?280:190,hi={};(f?[f]:fdi>=0?[]:vis.map(a=>fA(a.id))).forEach(r=>{hi[r.a.s]=r.p.c;hi[r.a.e]=r.p.c});
+ const dc=!f&&fdi>=0&&vis.some(a=>a.sd<=fdate&&fdate<=a.ed),mode=f?'a':dc?'d':hpin!==null?'p':null,hit=(a,p)=>mode=='a'?a.id===focus:mode=='d'?(a.sd<=fdate&&fdate<=a.ed):mode=='p'?p.id===hpin:true;
  let tot=0,sel=0,run=0;allA().forEach(a=>{tot++;a.st==2&&sel++;a.st==1&&run++});const pct=tot?Math.round(sel/tot*100):0;
  let endT='–',endS='',endC='var(--mut)';if(n){const e=days[n-1];endT=e.getDate()+' '+MS[e.getMonth()];if(iso(e)<=TARGET){endS='sesuai target 13 Nov 2026';endC='var(--gn)'}else{endS='melewati target 13 Nov ('+days.filter(d=>iso(d)>TARGET).length+' hari kerja)';endC='var(--rd)'}}
  let h='<div class="cards"><div class="mc"><p>Kegiatan</p><b>'+tot+'</b> <span class="sub">dalam '+S.ph.length+' tahap</span></div><div class="mc"><p>Progres</p><b>'+pct+'%</b> <span class="sub">'+sel+' dari '+tot+' selesai, '+run+' berjalan</span><div class="mt"><i style="width:'+pct+'%"></i></div></div><div class="mc"><p>Akhir rangkaian</p><b>'+endT+'</b> <span class="sub" style="color:'+endC+'">'+endS+'</span></div></div>';
@@ -90,31 +99,45 @@ function render(){clearTimeout(rt);if(!canEdit())edit=false;build();
  for(let i=ws;i<=we;){const k=days[i].getFullYear()*12+days[i].getMonth();let j=i;while(j+1<=we&&days[j+1].getFullYear()*12+days[j+1].getMonth()===k)j++;
   h+='<div class="m" style="grid-column:'+(i-ws+2)+'/'+(j-ws+3)+'">'+(j-i>=6?MN[days[i].getMonth()]+' '+days[i].getFullYear():MS[days[i].getMonth()])+'</div>';i=j+1}
  h+='<div class="sub">Kegiatan & tanggal</div>';
- for(let k=ws;k<=we;k++)h+='<div class="dn'+(hi[k]?' a':'')+(k===today?' t':'')+'" style="'+(hi[k]?'background:'+hi[k]+'33;border-radius:4px':'')+'">'+(zoom?'<small>'+DS[days[k].getDay()]+'</small>':'')+'<span>'+(!dense||days[k].getDay()===1?days[k].getDate():'')+'</span></div>';
+ for(let k=ws;k<=we;k++)h+='<div class="dn'+(hi[k]?' a':'')+(k===today?' t':'')+(k===fdi?' fd':'')+'" data-d="'+iso(days[k])+'" style="'+(hi[k]&&k!==fdi?'background:'+hi[k]+'33;border-radius:4px':'')+'">'+(zoom?'<small>'+DS[days[k].getDay()]+'</small>':'')+'<span>'+(!dense||days[k].getDay()===1?days[k].getDate():'')+'</span></div>';
  vp.forEach(p=>{const pi=S.ph.indexOf(p);
-  h+='<div class="ph" style="grid-column:1/-1"><span class="dot" style="background:'+p.c+'"></span>'+ROM[pi]+'. '+(edit?'<input data-f="pt" data-p="'+p.id+'" value="'+at(p.t)+'" style="width:240px"><button data-a="adda" data-v="'+p.id+'">+ Kegiatan</button><button data-a="delp" data-v="'+p.id+'" class="'+(pend=='p'+p.id?'dg':'')+'">'+(pend=='p'+p.id?'Yakin hapus tahap?':'Hapus tahap')+'</button>':esc(p.t)+(p.acts.length?'':' <span class="sub">(belum ada kegiatan)</span>'))+'</div>';
-  p.acts.forEach(a=>{const dm=focus!==null&&focus!==a.id;
-   h+='<div class="l'+(focus===a.id?' s':'')+(dm?' d':'')+'" data-r="'+a.id+'">'+(edit?'<div class="row" style="flex-wrap:nowrap"><input data-f="nm" data-r="'+a.id+'" value="'+at(a.name)+'" style="flex:1;min-width:0"><button data-a="del" data-v="'+a.id+'" class="'+(pend=='a'+a.id?'dg':'')+'" aria-label="Hapus kegiatan">'+(pend=='a'+a.id?'Yakin?':'Hapus')+'</button></div><div class="row" style="flex-wrap:nowrap;margin-top:3px"><input type="date" data-f="sd" data-r="'+a.id+'" value="'+a.sd+'" style="flex:1;min-width:0"><span>–</span><input type="date" data-f="ed" data-r="'+a.id+'" value="'+a.ed+'" style="flex:1;min-width:0"></div>':esc(a.name)+'<small><span class="dot" style="background:'+STC[a.st]+'"></span>'+rng(a)+' · '+STN[a.st]+'</small>')+'</div>';
+  h+='<div class="ph'+(hpin===p.id?' on':'')+'" data-p="'+p.id+'" title="Arahkan kursor untuk menyorot; klik atau ketuk untuk memfokuskan tahap ini" style="--pc:'+p.c+';grid-column:1/-1">'+ROM[pi]+'. '+(edit?'<input data-f="pt" data-p="'+p.id+'" value="'+at(p.t)+'" style="width:240px"><button data-a="adda" data-v="'+p.id+'">+ Kegiatan</button><button data-a="delp" data-v="'+p.id+'" class="'+(pend=='p'+p.id?'dg':'')+'">'+(pend=='p'+p.id?'Yakin hapus tahap?':'Hapus tahap')+'</button>':esc(p.t)+(p.acts.length?'':' <span class="sub">(belum ada kegiatan)</span>'))+'</div>';
+  p.acts.forEach(a=>{const dm=mode&&!hit(a,p),hr=(mode=='a'||mode=='d')&&hit(a,p);
+   h+='<div class="l'+(hr?' s':'')+(dm?' fade':'')+'" data-r="'+a.id+'" data-ph="'+p.id+'" style="--pc:'+p.c+'">'+(edit?'<div class="row" style="flex-wrap:nowrap"><input data-f="nm" data-r="'+a.id+'" value="'+at(a.name)+'" style="flex:1;min-width:0"><button data-a="del" data-v="'+a.id+'" class="'+(pend=='a'+a.id?'dg':'')+'" aria-label="Hapus kegiatan">'+(pend=='a'+a.id?'Yakin?':'Hapus')+'</button></div><div class="row" style="flex-wrap:nowrap;margin-top:3px"><input type="date" data-f="sd" data-r="'+a.id+'" value="'+a.sd+'" style="flex:1;min-width:0"><span>–</span><input type="date" data-f="ed" data-r="'+a.id+'" value="'+a.ed+'" style="flex:1;min-width:0"></div>':esc(a.name)+'<small><span class="dot" style="background:'+STC[a.st]+'"></span>'+rng(a)+' · '+STN[a.st]+'</small>')+'</div>';
    for(let k=ws;k<=we;k++){const inr=k>=a.s&&k<=a.e;
-    h+='<div class="c'+(k===today?' t':'')+'" data-r="'+a.id+'" title="'+full(days[k])+(inr?' – '+at(a.name):'')+'" style="'+(inr?'background:'+p.c+';opacity:'+((a.st?1:.6)*(dm?.3:1)):'')+'">'+(inr&&a.st==2&&k===a.e?'✓':'')+'</div>'}})});
- if(vis.length&&(!f||we===n-1)){h+='<div class="ph" style="color:var(--rd)">Akhir rangkaian</div>';for(let k=ws;k<=we;k++)h+='<div class="c" title="'+full(days[k])+'" style="min-height:26px;margin-top:10px;'+(k===n-1?'background:#E24B4A':'border-color:transparent')+'"></div>'}
+    h+='<div class="c'+(k===today?' t':'')+(k===fdi?' fc':'')+(dm?' fade':'')+'" data-r="'+a.id+'" data-ph="'+p.id+'" data-d="'+iso(days[k])+'" title="'+full(days[k])+(inr?' – '+at(a.name):'')+'" style="'+(inr?'background:'+p.c+';opacity:'+(a.st?1:.6):'')+'">'+(inr&&a.st==2&&k===a.e?'✓':'')+'</div>'}})});
+ if(vis.length&&(!f||we===n-1)){h+='<div class="ph" style="color:var(--rd)">Akhir rangkaian</div>';for(let k=ws;k<=we;k++)h+='<div class="c'+(k===fdi?' fc':'')+'" data-d="'+iso(days[k])+'" title="'+full(days[k])+'" style="min-height:26px;margin-top:10px;'+(k===n-1?'background:#E24B4A':'border-color:transparent')+'"></div>'}
  h+='</div></div>';
- h+='<div id="pn">';
- if(!f)h+='<span class="sub">Klik nama kegiatan atau kotaknya untuk memfokuskan timeline dan mengubah statusnya.</span>';
+ h+='<div id="pn"'+(f||fdi>=0||hpin!==null?' class="act"':'')+'>';
+ if(!f&&fdi>=0){const ds=iso(days[fdi]),L=vis.filter(a=>a.sd<=ds&&ds<=a.ed);
+  h+='<div class="row" style="justify-content:space-between"><b>'+full(days[fdi])+'</b><button data-a="close">Lihat semua</button></div>';
+  if(L.length)h+='<div class="sub" style="margin:8px 0 6px">'+L.length+' kegiatan pada tanggal ini. Klik untuk menuju kegiatannya:</div><div class="row">'+L.map(a=>'<button data-a="goto" data-v="'+a.id+'">'+esc(a.name)+' <span class="sub">('+rng(a)+')</span></button>').join('')+'</div>';
+  else{const nx=vis.filter(a=>a.sd>ds).sort((x,y)=>x.sd<y.sd?-1:1)[0];h+='<div class="sub" style="margin:8px 0 6px">Tidak ada kegiatan pada tanggal ini.</div>'+(nx?'<div class="row"><button data-a="goto" data-v="'+nx.id+'">Kegiatan berikutnya: '+esc(nx.name)+' <span class="sub">('+rng(nx)+')</span></button></div>':'')}}
+ else if(!f&&hpin!==null){const P=S.ph.find(x=>x.id===hpin),A=P.acts;
+  h+='<div class="row" style="justify-content:space-between"><b>'+ROM[S.ph.indexOf(P)]+'. '+esc(P.t)+'</b><button data-a="close">Lihat semua</button></div>';
+  if(A.length){const s0=A.reduce((m,a)=>a.sd<m?a.sd:m,A[0].sd),e0=A.reduce((m,a)=>a.ed>m?a.ed:m,A[0].ed);
+   h+='<div class="sub" style="margin:8px 0 6px">'+A.length+' kegiatan, '+rng({sd:s0,ed:e0})+', '+A.filter(a=>a.st==2).length+' selesai. Klik untuk menuju kegiatannya:</div><div class="row">'+A.map(a=>'<button data-a="goto" data-v="'+a.id+'">'+esc(a.name)+' <span class="sub">('+rng(a)+')</span></button>').join('')+'</div>'}
+  else h+='<div class="sub" style="margin:8px 0 6px">Belum ada kegiatan pada tahap ini.</div>'}
+ else if(!f)h+='<span class="sub">Klik judul tahap, nama kegiatan, atau kotak tanggal untuk menyorot. Klik lagi atau tekan Esc untuk membatalkan.</span>';
  else{const a=f.a;h+='<div class="row" style="justify-content:space-between"><b>'+esc(a.name)+'</b><button data-a="close">Lihat semua</button></div><div class="kv"><span>Tahap</span><span>'+ROM[S.ph.indexOf(f.p)]+'. '+esc(f.p.t)+'</span><span>Tanggal</span><span>'+full(D(a.sd))+(a.sd!==a.ed?' – '+full(D(a.ed)):'')+'</span><span>Durasi</span><span>'+(a.e-a.s+1)+' hari kerja</span><span>Pelaksana</span>'+(edit?'<input data-f="who" value="'+at(a.who)+'">':'<span>'+esc(a.who||'–')+'</span>')+'<span>Output</span>'+(edit?'<input data-f="out" value="'+at(a.out)+'">':'<span>'+esc(a.out||'–')+'</span>')+'</div><div class="row"><span class="sub">Status</span>'+(canEdit()?STN.map((s,k)=>'<button data-a="st" data-v="'+k+'" class="'+(a.st===k?'on':'')+'">'+s+'</button>').join(''):'<b>'+STN[a.st]+'</b>')+'</div>'}
- document.getElementById('app').innerHTML=h+'</div>'}
+ document.getElementById('app').innerHTML=h+'</div>';}
 function snap(s,isEnd){const d=D(s),w=d.getDay();if(w==6||w==0){d.setDate(d.getDate()+(isEnd?(w==6?-1:-2):(w==6?2:1)));return iso(d)}return s}
 document.getElementById('app').addEventListener('click',e=>{const t=e.target,b=t.closest('[data-a]');let rr=false;
  const act=b&&b.dataset.a,v=b&&b.dataset.v,key=act=='del'?'a'+v:act=='delp'?'p'+v:act=='reset'?'reset':null;
  if(key){if(pend===key){if(key=='reset'){S=seed();focus=null;pf=null}else if(key[0]=='a'){const i=+v;S.ph.forEach(p=>p.acts=p.acts.filter(a=>a.id!==i));if(focus===i)focus=null}else{S.ph=S.ph.filter(p=>p.id!==+v)}pend=null;save()}else pend=key;render();return}
  if(pend){pend=null;rr=true}
- if(act=='pf'){pf=v?+v:null;focus=null;rr=true}else if(act=='edit'){edit=!edit;rr=true}else if(act=='close'){focus=null;rr=true}
+ if(act=='pf'){pf=v?+v:null;focus=null;fdate=null;hpin=null;rr=true}else if(act=='edit'){edit=!edit;rr=true}else if(act=='close'){pick(null);rr=true}else if(act=='goto'){pick('a',+v,fdate,1);rr=true}
  else if(act=='login'){showLogin=!showLogin;rr=true}else if(act=='out'){auth.signOut()}
  else if(act=='dologin'){const em=document.getElementById('em').value.trim(),pw=document.getElementById('pw').value;stat('Memproses masuk…');auth.signInWithEmailAndPassword(em,pw).then(()=>stat('')).catch(e=>stat('Gagal masuk: '+(e.code||e.message)))}
  else if(act=='st'){const r=fA(focus);if(r){r.a.st=+v;save();rr=true}}
  else if(act=='addp'||act=='adda'){let p;if(act=='addp'){p={id:nid(),t:'Tahap baru',c:PAL[S.ph.length%PAL.length],acts:[]};S.ph.push(p)}else p=S.ph.find(x=>x.id===+v);
   if(p){const d=p.acts.length?p.acts[p.acts.length-1].ed:(n?iso(days[0]):'2026-10-01');p.acts.push({id:nid(),name:'Kegiatan baru',sd:d,ed:d,who:'',out:'',st:0});save();rr=true}}
- else if(!t.closest('input,select,button')){const c=t.closest('[data-r]');if(c){const i=+c.dataset.r;focus=focus===i?null:i;rr=true}}
+ else if(t.closest('.ph[data-p]')&&!t.closest('input,select,button')){pick('p',+t.closest('.ph[data-p]').dataset.p);rr=true}
+ else if(!t.closest('input,select,button')){const c=t.closest('[data-d],[data-r]');
+  if(c){const d=c.dataset.d,r=c.dataset.r;
+   if(d){const fa=r?fA(+r):null;if(fa&&fa.a.sd<=d&&d<=fa.a.ed)pick('a',fa.a.id,d);else pick('d',d)}
+   else pick('a',+r,null);
+   rr=true}}
  if(rr)render()});
 document.getElementById('app').addEventListener('input',e=>{const t=e.target,f=t.dataset.f;if(!f)return;
  if(f=='nm'){const r=fA(+t.dataset.r);if(r){r.a.name=t.value;save()}}else if(f=='pt'){const p=S.ph.find(x=>x.id===+t.dataset.p);if(p){p.t=t.value;save()}}
@@ -122,5 +145,15 @@ document.getElementById('app').addEventListener('input',e=>{const t=e.target,f=t
 document.getElementById('app').addEventListener('change',e=>{const t=e.target,f=t.dataset.f;if(f!='sd'&&f!='ed')return;
  const r=fA(+t.dataset.r),y=+(t.value||'0').slice(0,4);if(!r||y<2020||y>2035)return;
  const v=snap(t.value,f=='ed');r.a[f]=v;if(f=='sd'&&r.a.ed<v)r.a.ed=v;if(f=='ed'&&r.a.sd>v)r.a.sd=v;save();clearTimeout(rt);rt=setTimeout(render,500)});
+let hpin=null;
+function pick(k,v,x,nt){const same=k===null?false:k=='a'?(focus===v&&(x==null||fdate===x)):k=='d'?(focus===null&&fdate===v):hpin===v;
+ focus=fdate=hpin=null;if(same&&!nt)return;
+ if(k=='a'){focus=v;fdate=x||null}else if(k=='d')fdate=v;else if(k=='p')hpin=v}
+document.addEventListener('keydown',e=>{const tg=(e.target&&e.target.tagName)||'';if(e.key==='Escape'&&tg!=='INPUT'&&tg!=='SELECT'&&(focus!==null||fdate||hpin!==null)){pick(null);render()}});
+const RT=document.documentElement,effTheme=()=>RT.getAttribute('data-theme')||(matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light');
+function themeLab(){document.getElementById('tg').textContent=effTheme()==='dark'?'Mode terang':'Mode gelap'}
+document.getElementById('tg').addEventListener('click',()=>{const t=effTheme()==='dark'?'light':'dark';RT.setAttribute('data-theme',t);try{localStorage.setItem('pipk-theme',t)}catch(e){}themeLab()});
+try{matchMedia('(prefers-color-scheme:dark)').addEventListener('change',themeLab)}catch(e){}
+themeLab();
 render();
 </script></body></html>
